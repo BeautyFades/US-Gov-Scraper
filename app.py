@@ -1,27 +1,28 @@
 import os
 import undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
-from flask import Flask, request, Response, jsonify
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from flask import Flask, Response, send_file
 import config as config
-from datetime import datetime
 from utils.logger import ScraperLogger
 import logging
+from utils.debug_functions import *
+
 
 app = Flask('app')
 l = ScraperLogger()
 
-print('LORD FORGIVE ME FOR WHAT I AM ABOUT TO CODE')
 
-def get_client_ip_address():
-    return request.remote_addr
+logging.info('Lord forgive me for what I am about to code')
 
 
 @app.route("/healthcheck", methods=["GET"])
 def health_check():
-    logging.info(f'Scraper received a /healthcheck request from {get_client_ip_address()}. Health checking...')
-    response = "{'returnStatus': 'success'}, {'statusCode': '200'}, {'message': 'alive'}"
 
-    print(response)
+    logging.info(f'Scraper received a /healthcheck request from {get_client_request_ip_address()}. Health checking...')
+    ts = str(get_current_timestamp_millis_utc())
+    response = "[{'returnStatus': 'success'}, {'statusCode': '200'}, {'timestampMillisUTC': '" + ts + "'}, {'message': 'alive'}]"
 
     return Response(
                 response=response,
@@ -33,12 +34,13 @@ def health_check():
 
 @app.route("/", methods=["GET"])
 def scrape():
-    logging.info(f'Scraper received a / request from {get_client_ip_address()}.')
 
-    browser = uc.Chrome(version_main=106, use_subprocess=True)
-    browser.get('https://www.congress.gov/members')
+    logging.info(f'Scraper received a / request from {get_client_request_ip_address()}.')
 
-    elem = browser.find_element(By.XPATH, '//ol[@class="basic-search-results-lists expanded-view"]')
+    driver = uc.Chrome(version_main=106)
+    driver.get('https://www.congress.gov/members')
+
+    elem = driver.find_element(By.XPATH, '//ol[@class="basic-search-results-lists expanded-view"]')
 
     all_li = elem.find_elements(By.XPATH, './/li[@class="expanded"]')
 
@@ -52,18 +54,34 @@ def scrape():
     return str1
 
 
-@app.route("/google", methods=["GET"])
+@app.route("/api/v1/google", methods=["GET"])
 def google():
-    logging.info(f'Scraper received a /google request from {get_client_ip_address()}.')
 
-    browser = uc.Chrome(version_main=106, use_subprocess=True)
-    browser.get("https://google.com")
+    logging.info(f'Scraper received a /api/v1/google request from {get_client_request_ip_address()}.')
 
-    html_source = browser.page_source
+    driver = uc.Chrome(version_main=106)
+    driver.get("https://google.com")
+
+    html_source = driver.page_source
     print(html_source)
 
     return html_source
 
+
+@app.route("/api/v1/test-detection", methods=["GET"])
+def test_detection():
+
+    logging.info(f'Scraper received a /api/v1/test-detection request from {get_client_request_ip_address()}.')
+
+    driver = uc.Chrome(version_main=106)
+    driver.get('https://nowsecure.nl')
+
+    wait_for_element = WebDriverWait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[2]/div/main/h1")))
+
+    driver.save_screenshot('detectionResult.png')
+
+    return send_file('detectionResult.png', mimetype='image/png')
+
+
 if __name__ == '__main__':
-    print('MAINTRAP')
-    app.run(host='0.0.0.0', port=8000)
+    app.run(host='0.0.0.0', port=8080)
