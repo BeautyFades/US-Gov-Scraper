@@ -18,11 +18,11 @@ l = ScraperLogger()
 logging.info('Lord forgive me for what I am about to code')
 
 
-chrome_options = uc.ChromeOptions()
-chrome_options.add_argument('--no-sandbox')
-chrome_options.add_argument('--headless')
-chrome_options.add_argument('--disable-setuid-sandbox')
-driver = uc.Chrome(version_main=106, options=chrome_options)
+#chrome_options = uc.ChromeOptions()
+#chrome_options.add_argument('--no-sandbox')
+#chrome_options.add_argument('--headless')
+#chrome_options.add_argument('--disable-setuid-sandbox')
+driver = uc.Chrome(version_main=106)
 
 @app.route("/healthcheck", methods=["GET"])
 def health_check():
