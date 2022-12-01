@@ -84,8 +84,7 @@ def test_detection():
 
     driver.get('https://nowsecure.nl')
 
-    #wait_for_element = WebDriverWait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[2]/div/main/h1")))
-    sleep(180)
+    wait_for_element = WebDriverWait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[2]/div/main/h1")))
     driver.save_screenshot('detectionResult.png')
 
     return send_file('detectionResult.png', mimetype='image/png')
