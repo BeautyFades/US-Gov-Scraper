@@ -61,7 +61,6 @@ def scrape():
 
     print(namelist)
     str1 = '\n'.join(str(e) for e in namelist)
-    driver.quit()
     return str1
 
 
@@ -74,7 +73,6 @@ def google():
 
     html_source = driver.page_source
     print(html_source)
-    driver.quit()
 
     return html_source
 
@@ -103,7 +101,6 @@ def test_session():
 
     wait_for_element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, "/html/body/table")))
     driver.save_screenshot('detectionResult.png')
-    driver.quit()
 
     return send_file('detectionResult.png', mimetype='image/png')
 
