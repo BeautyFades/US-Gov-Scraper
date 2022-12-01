@@ -22,6 +22,10 @@ chrome_options = uc.ChromeOptions()
 chrome_options.add_argument('--no-sandbox')
 chrome_options.add_argument('--headless')
 chrome_options.add_argument('--disable-setuid-sandbox')
+chrome_options.add_argument('--disable-gpu')
+chrome_options.add_argument(
+        "--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36"
+    )
 driver = uc.Chrome(version_main=106, options=chrome_options)
 
 @app.route("/healthcheck", methods=["GET"])
@@ -80,8 +84,20 @@ def test_detection():
 
     driver.get('https://nowsecure.nl')
 
-    #wait_for_element = WebDriverWait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[2]/div/main/h1")))
-    sleep(50)
+    wait_for_element = WebDriverWait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[2]/div/main/h1")))
+    driver.save_screenshot('detectionResult.png')
+
+    return send_file('detectionResult.png', mimetype='image/png')
+
+
+@app.route("/api/v1/test-session", methods=["GET"])
+def test_session():
+
+    logging.info(f'Scraper received a /api/v1/test-session request from {get_client_request_ip_address()}.')
+
+    driver.get('https://infosimples.github.io/detect-headless/')
+
+    wait_for_element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, "/html/body/table")))
     driver.save_screenshot('detectionResult.png')
 
     return send_file('detectionResult.png', mimetype='image/png')
