@@ -87,7 +87,6 @@ def test_detection():
     #wait_for_element = WebDriverWait(driver, 60).until(EC.visibility_of_element_located((By.XPATH, "/html/body/div[2]/div/main/h1")))
     sleep(180)
     driver.save_screenshot('detectionResult.png')
-    driver.quit()
 
     return send_file('detectionResult.png', mimetype='image/png')
 
