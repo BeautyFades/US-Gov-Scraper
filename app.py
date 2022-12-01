@@ -99,7 +99,7 @@ def test_session():
 
     wait3 = WebDriverWait(driver, 10).until(EC.alert_is_present())
     sleep(2)
-    driver.switch_to().alert.accept()
+    driver.switch_to.alert.accept()
 
     wait_for_element = WebDriverWait(driver, 10).until(EC.visibility_of_element_located((By.XPATH, "/html/body/table")))
     driver.save_screenshot('detectionResult.png')
