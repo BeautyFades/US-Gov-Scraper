@@ -7,15 +7,16 @@ from flask import Response
 
 
 # [START /healthcheck route definition]
-healthcheck = Blueprint('healthcheck', __name__)
-@healthcheck.route("/healthcheck", methods=["GET"])
+healthcheck_bp = Blueprint('healthcheck', __name__)
+
+@healthcheck_bp.route("/healthcheck", methods=["GET"])
 def health_check():
 
     logging.info(f'Scraper received a /healthcheck request from {get_client_request_ip_address()}. Health checking...')
 
     # Get UTC millisecond timestamp and format response
     ts = str(get_current_timestamp_millis_utc())
-    response = "[{'returnStatus': 'success'}, {'statusCode': '200'}, {'timestampMillisUTC': '" + ts + "'}, {'message': 'alive'}]"
+    response = f"{{'returnStatus': 'success', 'statusCode': 200, 'timestampMillisUTC': {ts}, 'message': 'alive'}}"
 
 
     return Response(
