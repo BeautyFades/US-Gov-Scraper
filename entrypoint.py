@@ -1,8 +1,9 @@
 # [START imports]
 from flask import Flask
 from utils.logger import ScraperLogger
-from routes.healthcheck import healthcheck
-from routes.run_scraper import run_scraper
+from routes.base.healthcheck import healthcheck_bp
+from routes.api.v1.run_scraper import run_scraper_bp
+from routes.admin.env_vars import env_vars_bp
 import logging
 # [END imports]
 
@@ -15,8 +16,9 @@ logging.info('Lord forgive me for what I am about to code')
 
 
 # [START route blueprint registering]
-app.register_blueprint(healthcheck)
-app.register_blueprint(run_scraper)
+app.register_blueprint(healthcheck_bp)
+app.register_blueprint(run_scraper_bp)
+app.register_blueprint(env_vars_bp)
 # [END route blueprint registering]
 
 

@@ -11,10 +11,9 @@ from time import sleep
 
 
 # [START /api/v1/scrape route definition]
-run_scraper = Blueprint('run_scraper', __name__)
+run_scraper_bp = Blueprint('run_scraper', __name__)
 
-
-@run_scraper.route("/api/v1/scrape", methods=["GET"])
+@run_scraper_bp.route("/api/v1/scrape", methods=["GET"])
 def scrape():
 
     logging.info(f'Scraper received a / request from {get_client_request_ip_address()}.')
