@@ -5,7 +5,7 @@ This project implements a Cloud-based framework for running Selenium, Chrome and
 # Local deploy commands
 1. Ensure the Docker daemon is running on your machine
 2. Build the container by ```cd```ing into this projects root folder (the one that contains the _Dockerfile_) and run the following command ```docker build -t scraper .```.
-3. Run the container by executing the following command: ```docker run -p 8080:8080 scraper ipython app.py```. Note the port mappings map port 8080 on the host machine to the port 8080 on the container (the one configured in the _Dockerfile_ and also on ```entrypoint.py```'s ```app.run()``` statement)
+3. Run the container by executing the following command: ```docker run -p 8080:8080 scraper python entrypoint.py```. Note the port mappings map port 8080 on the host machine to the port 8080 on the container (the one configured in the _Dockerfile_ and also on ```entrypoint.py```'s ```app.run()``` statement)
 4. You can now access the Flask routes by visiting [localhost:8080/<route_path>](), such as [localhost:8080/healthcheck]() or [localhost:8080/api/v1/scrape]().
 
 # Google Cloud Run deploy commands
