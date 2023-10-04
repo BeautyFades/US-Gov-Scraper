@@ -1,4 +1,4 @@
-FROM ultrafunk/undetected-chromedriver:latest
+FROM joyzoursky/python-chromedriver:3.9-selenium
 
 RUN apt-get update
 
